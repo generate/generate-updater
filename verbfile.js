@@ -19,14 +19,9 @@ module.exports = function(app) {
   app.use(trees(generator, [
     'default',
     'minimal',
-    'gulp',
-    'base',
-    'generator',
-    'helper',
-    'files',
+    'updater',
     'rootfiles',
-    'dotfiles',
-    'index'
+    'dotfiles'
   ]));
 
   app.task('docs', function(cb) {
