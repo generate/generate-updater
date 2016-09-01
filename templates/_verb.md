@@ -1,0 +1,206 @@
+{{#block "demo"}}
+<br>
+![{%= name %} demo](https://raw.githubusercontent.com/{%= repo %}/master/{%= findFile(['docs/demo.gif', 'demo.gif', 'example.git', 'docs/example.gif']) %})
+{{/block}}
+
+
+## What is "{%= platform.proper %}"?
+{%= include(platform.name + "/what-is-" + platform.name) %}
+
+
+## Command line usage
+
+### Install
+{%= include(platform.name + "/" + platform.configname + "-install") %}
+
+### Run
+
+You should now be able to run `{%= name %}` with the following command:
+
+```sh
+$ {%= platform.command %} {%= alias %}
+```
+
+**What will happen?**
+
+Running `$ gen {%= alias %}` will run the generator's [default task](#default), which will:
+
+1. prompt you for any information that's missing
+1. render the necessary template(s) using your answers
+1. write [the resulting files](#available-tasks) to the current working directory
+
+**What you should see in the terminal**
+
+If completed successfully, you should see both `starting` and `finished` events in the terminal, like the following:
+
+```sh
+[00:44:21] starting ...
+...
+[00:44:22] finished ✔
+```
+
+If you do not see one or both of those events, please [let us know about it](../../issues).
+
+### Help
+
+To see a general help menu and available commands for {%= platform.proper %}'s CLI, run:
+
+```sh
+$ {%= platform.command %} help
+```
+
+### Running tasks
+
+Tasks on `{%= name %}` are run by passing the name of the task to run after the {%= platform.configname %} name, delimited by a comma:
+
+```sh
+$ {%= platform.command %} {%= alias %}:foo
+      ^     ^
+{%= platform.configname %}   task
+```
+
+**Example**
+
+The following will run {%= platform.configname %} `foo`, task `bar`:
+
+```sh
+$ {%= platform.command %} foo:bar
+```
+
+**Default task**
+
+When a task name is not explicitly passed on the command line, {%= platform.proper %}'s CLI will run the [default](#default) task.
+
+## Available tasks
+
+{%= apidocs("generator.js") %}
+
+Visit {%= platform.proper %}'s [documentation for tasks]({%= platform.docs %}/tasks.md).
+
+
+## API usage
+
+Use `{%= name %}` as a [plugin][docs]{plugins.md} in your own [generator][docs]{generators.md}.
+
+### Install locally
+
+{%= include("install-npm", {save: true}) %}
+
+### Use as a plugin
+
+When used as a plugin, tasks from `{%= name %}` are added to your generator's instance.
+
+```js
+module.exports = function(app) {
+  app.use(require('{%= name %}'));
+  // do generator stuff
+};
+```
+
+**Running tasks**
+
+You can now run any tasks from `{%= name %}` as if they were part of your own generator.
+
+```js
+module.exports = function(app) {
+  app.use(require('{%= name %}'));
+
+  app.task('foo', function(cb) {
+    // do task stuff
+    cb();
+  });
+
+  // run the `mit` task from `{%= name %}`
+  app.task('default', ['foo', 'mit']);
+};
+```
+
+### Register as a generator
+
+When registered as a generator, tasks from `{%= name %}` are added to the "namespace" you give to the generator.
+
+```js
+module.exports = function(app) {
+  app.register('foo', require('{%= name %}'));
+  // generate
+};
+```
+
+**Running tasks**
+
+Pass the names of one or more tasks to run to the `.generate` method, prefixed with the namespace of the sub-generator (`foo`, in our example):
+
+**Examples**
+
+Run the `bar` task from generator `foo`:
+
+```js
+module.exports = function(app) {
+  app.register('foo', require('{%= name %}'));
+
+  app.generate('foo:bar', function(err) {
+    if (err) console.log(err);
+  });
+};
+```
+
+Wrap the call to `.generate` in a task, so it can be run on demand:
+
+```js
+module.exports = function(app) {
+  app.register('foo', require('{%= name %}'));
+
+  app.task('bar', function(cb) {
+    app.generate('foo:bar', cb);
+  });
+};
+```
+
+**More information**
+
+Visit the [generator docs][docs]{generators.md} to learn more about creating, installing, using and publishing generators.
+
+
+## Running multiple generators
+
+Generate supports running multiple generators at once. Here are some examples of other generators that work well with `{%= name %}`.
+
+### generate-install
+
+Run [generate-install][] **after** this generator to prompt to install any `dependencies` or `devDependencies` necessary for the generated files.
+
+**Example**
+
+![{%= name %} generate-install example](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo-install.gif)
+
+### generate-dest
+
+Run [generate-dest][] **before** this generator to prompt for the destination directory to use for generated files.
+
+**Example**
+
+![{%= name %} generate-dest example](https://raw.githubusercontent.com/{%= repo %}/master/docs/demo-dest.gif)
+
+
+## Customization
+
+The following instructions can be used to override settings in `{%= name %}`. Visit the [Generate documentation][docs]{overriding-defaults.md} to learn about other ways to override defaults.
+
+### Destination directory
+
+To customize the destination directory, install [generate-dest][] globally, then in the command line prefix `dest` before any other {%= platform.configname %} names.
+
+For example, the following will prompt you for the destination path to use, then pass the result to `{%= name %}`:
+
+```sh
+$ {%= platform.command %} dest {%= alias %}
+```
+
+### Overriding templates
+
+You can override a template by adding a template of the same name to the `templates` directory in user home.
+
+For example, to override the `foo.tmpl` template, add a template at the following path `~/generate/templates/foo.tmpl`, where `~/` is the user-home directory that `os.homedir()` resolves to on your system.
+
+
+[docs]: {%= platform.docs %}/

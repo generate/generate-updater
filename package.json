@@ -1,0 +1,114 @@
+{
+  "name": "generate-updater",
+  "description": "Generate a generate generator project, complete with unit tests.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/generate/generate-updater",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "generate/generate-updater",
+  "bugs": {
+    "url": "https://github.com/generate/generate-updater/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "generator.js",
+    "index.js",
+    "README.md",
+    "templates"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "extend-shallow": "^2.0.1",
+    "generate-git": "^0.1.11",
+    "generate-mocha": "^0.5.0",
+    "generate-project": "^0.4.1",
+    "is-valid-app": "^0.2.0",
+    "through2": "^2.0.1"
+  },
+  "devDependencies": {
+    "delete": "^0.3.2",
+    "generate": "^0.11.2",
+    "gulp-format-md": "^0.1.10",
+    "mocha": "^3.0.2",
+    "npm-install-global": "^0.1.2",
+    "verb-generate-readme": "^0.1.30",
+    "verb-repo-data": "^0.1.11",
+    "verb-trees": "^0.1.0"
+  },
+  "keywords": [
+    "boilerplate",
+    "build",
+    "cli",
+    "cli-app",
+    "command-line",
+    "create",
+    "dev",
+    "development",
+    "framework",
+    "front",
+    "frontend",
+    "generate",
+    "generate-generator",
+    "generate-plugin",
+    "generate-updater",
+    "generategenerator",
+    "generateplugin",
+    "generator",
+    "init",
+    "initialize",
+    "new",
+    "plugin",
+    "project",
+    "projects",
+    "scaffold",
+    "scaffolder",
+    "scaffolding",
+    "template",
+    "templates",
+    "updater",
+    "verb",
+    "webapp",
+    "yeoman",
+    "yo"
+  ],
+  "lintDeps": {
+    "ignore": [
+      "templates"
+    ]
+  },
+  "verb": {
+    "toc": {
+      "method": "preWrite"
+    },
+    "layout": "generator",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "related": {
+      "list": [
+        "generate"
+      ]
+    },
+    "lint": {
+      "reflinks": true
+    },
+    "reflinks": [
+      "assemble",
+      "base",
+      "generate",
+      "generate-dest",
+      "generate-install",
+      "gulp",
+      "verb",
+      "verb-readme-generator"
+    ]
+  }
+}
