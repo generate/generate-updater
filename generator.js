@@ -37,15 +37,13 @@ module.exports = function(app) {
    * @api public
    */
 
-  app.task('default', ['check-directory', 'updater']);
+  app.task('default', ['updater']);
   app.task('updater', [
     'prompt-data',
-    'docs',
     'test',
     'dotfiles',
     'main',
-    'rootfiles',
-    'prompt-git'
+    'rootfiles'
   ]);
 
   /**
