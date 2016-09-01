@@ -1,7 +1,7 @@
 {
   "name": "generate-updater",
   "description": "Generate an [Update] updater project.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/generate/generate-updater",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "generate/generate-updater",
