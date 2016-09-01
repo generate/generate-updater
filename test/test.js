@@ -49,6 +49,7 @@ describe('generate-updater', function() {
     app.cwd = actual();
 
     app.use(require('verb-repo-data'));
+    app.data('testFile', 'temp.txt');
 
     // pre-populate template data to avoid prompts from `ask` helper
     app.option('prompt', false);
