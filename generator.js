@@ -43,7 +43,8 @@ module.exports = function(app) {
     'test',
     'dotfiles',
     'main',
-    'rootfiles'
+    'rootfiles',
+    'verbmd'
   ]);
 
   /**
@@ -128,7 +129,7 @@ module.exports = function(app) {
   ]);
 
   /**
-   * Add a `verbfile.js` and basic docs in the `docs` directory.
+   * Adds files tree docs to the `docs` directory.
    *
    * ```sh
    * $ gen updater:docs
@@ -137,7 +138,43 @@ module.exports = function(app) {
    * @api public
    */
 
-  task(app, 'docs', ['templates/docs/*.md', 'templates/verbfile.js']);
+  app.task('docs', ['trees', 'verbfile', 'verbmd']);
+
+  /**
+   * Adds files tree docs to the `docs` directory.
+   *
+   * ```sh
+   * $ gen updater:docs
+   * ```
+   * @name updater:docs
+   * @api public
+   */
+
+  task(app, 'trees', ['templates/docs/*.md']);
+
+  /**
+   * Add a `verbfile.js` to the current working directory.
+   *
+   * ```sh
+   * $ gen updater:verbfile
+   * ```
+   * @name updater:verbfile
+   * @api public
+   */
+
+  task(app, 'verbfile', ['templates/verbfile.js']);
+
+  /**
+   * Add a `.verb.md` readme template to the current working directory.
+   *
+   * ```sh
+   * $ gen updater:verbmd
+   * ```
+   * @name updater:verbmd
+   * @api public
+   */
+
+  task(app, 'verbmd', ['templates/_verb.md']);
 
   /**
    * Create a `test.js` file in the `test` directory, with unit tests for all of the tasks
@@ -150,8 +187,12 @@ module.exports = function(app) {
    * @api public
    */
 
-  task(app, 'test', ['templates/tests/test.js', 'templates/tests/plugin.js']);
   task(app, 'test-basic', ['templates/tests/basic.js']);
+  task(app, 'test', [
+    'templates/tests/fixtures/*',
+    'templates/tests/plugin.js',
+    'templates/tests/test.js'
+  ]);
 
   /**
    * Generate files in the updater's `templates` directory.
