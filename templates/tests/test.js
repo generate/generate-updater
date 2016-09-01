@@ -32,7 +32,7 @@ function exists(name, cb) {
   };
 }
 
-describe('<%= ask("project.name") %>', function() {
+describe('<%= ask("name") %>', function() {
   this.slow(250);
 
   if (!process.env.CI && !process.env.TRAVIS) {
@@ -65,7 +65,7 @@ describe('<%= ask("project.name") %>', function() {
     it('should only register the plugin once', function(cb) {
       var count = 0;
       app.on('plugin', function(name) {
-        if (name === '<%= ask("project.name") %>') {
+        if (name === '<%= ask("name") %>') {
           count++;
         }
       });
@@ -79,7 +79,7 @@ describe('<%= ask("project.name") %>', function() {
     it('should extend tasks onto the instance', function() {
       app.use(generator);
       assert(app.tasks.hasOwnProperty('default'));
-      assert(app.tasks.hasOwnProperty('<%= alias %>'));
+      assert(app.tasks.hasOwnProperty('<%= camelcase(alias) %>'));
     });
 
     it('should run the `default` task with .build', function(cb) {
@@ -94,63 +94,63 @@ describe('<%= ask("project.name") %>', function() {
   });
 
   if (!process.env.CI && !process.env.TRAVIS) {
-    describe('<%= alias %> (CLI)', function() {
-      it('should run the default task using the `<%= ask("project.name") %>` name', function(cb) {
+    describe('<%= camelcase(alias) %> (CLI)', function() {
+      it('should run the default task using the `<%= ask("name") %>` name', function(cb) {
         app.use(generator);
-        app.generate('<%= ask("project.name") %>', exists(fixtures('text.txt'), cb));
+        app.generate('<%= ask("name") %>', exists(fixtures('text.txt'), cb));
       });
 
-      it('should run the default task using the `generator` generator alias', function(cb) {
+      it('should run the default task using the `generator` generator camelcase(alias)', function(cb) {
         app.use(generator);
-        app.generate('<%= alias %>', exists(fixtures('text.txt'), cb));
+        app.generate('<%= camelcase(alias) %>', exists(fixtures('text.txt'), cb));
       });
     });
   }
 
-  describe('<%= alias %> (API)', function() {
+  describe('<%= camelcase(alias) %> (API)', function() {
     it('should run the default task on the generator', function(cb) {
-      app.register('<%= alias %>', generator);
-      app.generate('<%= alias %>', exists(fixtures('text.txt'), cb));
+      app.register('<%= camelcase(alias) %>', generator);
+      app.generate('<%= camelcase(alias) %>', exists(fixtures('text.txt'), cb));
     });
 
-    it('should run the `<%= alias %>` task', function(cb) {
-      app.register('<%= alias %>', generator);
-      app.generate('<%= alias %>:<%= alias %>', exists(fixtures('text.txt'), cb));
+    it('should run the `<%= camelcase(alias) %>` task', function(cb) {
+      app.register('<%= camelcase(alias) %>', generator);
+      app.generate('<%= camelcase(alias) %>:<%= camelcase(alias) %>', exists(fixtures('text.txt'), cb));
     });
 
     it('should run the `default` task when defined explicitly', function(cb) {
-      app.register('<%= alias %>', generator);
-      app.generate('<%= alias %>:default', exists(fixtures('text.txt'), cb));
+      app.register('<%= camelcase(alias) %>', generator);
+      app.generate('<%= camelcase(alias) %>:default', exists(fixtures('text.txt'), cb));
     });
   });
 
   describe('sub-generator', function() {
     it('should work as a sub-generator', function(cb) {
       app.register('foo', function(foo) {
-        foo.register('<%= alias %>', generator);
+        foo.register('<%= camelcase(alias) %>', generator);
       });
-      app.generate('foo.<%= alias %>', exists(fixtures('text.txt'), cb));
+      app.generate('foo.<%= camelcase(alias) %>', exists(fixtures('text.txt'), cb));
     });
 
     it('should run the `default` task by default', function(cb) {
       app.register('foo', function(foo) {
-        foo.register('<%= alias %>', generator);
+        foo.register('<%= camelcase(alias) %>', generator);
       });
-      app.generate('foo.<%= alias %>', exists(fixtures('text.txt'), cb));
+      app.generate('foo.<%= camelcase(alias) %>', exists(fixtures('text.txt'), cb));
     });
 
     it('should run the `generator:default` task when defined explicitly', function(cb) {
       app.register('foo', function(foo) {
-        foo.register('<%= alias %>', generator);
+        foo.register('<%= camelcase(alias) %>', generator);
       });
-      app.generate('foo.<%= alias %>:default', exists(fixtures('text.txt'), cb));
+      app.generate('foo.<%= camelcase(alias) %>:default', exists(fixtures('text.txt'), cb));
     });
 
-    it('should run the `generator:<%= alias %>` task', function(cb) {
+    it('should run the `generator:<%= camelcase(alias) %>` task', function(cb) {
       app.register('foo', function(foo) {
-        foo.register('<%= alias %>', generator);
+        foo.register('<%= camelcase(alias) %>', generator);
       });
-      app.generate('foo.<%= alias %>:<%= alias %>', exists(fixtures('text.txt'), cb));
+      app.generate('foo.<%= camelcase(alias) %>:<%= camelcase(alias) %>', exists(fixtures('text.txt'), cb));
     });
 
     it('should work with nested sub-generators', function(cb) {

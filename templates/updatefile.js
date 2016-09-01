@@ -1,6 +1,8 @@
 ---
 install:
   dependencies: ['generate-project', 'is-valid-app']
+rename:
+  basename: 'updatefile.js'
 ---
 'use strict';
 
@@ -16,17 +18,17 @@ module.exports = function(app) {
   app.use(rqeuire('generate-project'));
 
   /**
-   * Scaffold out a new <%= alias %> project. This task is an alias for the [<%= alias %>](#<%= alias %>)
+   * Scaffold out a new <%= camelcase(alias) %> project. This task is an alias for the [<%= camelcase(alias) %>](#<%= camelcase(alias) %>)
    * task, to allow running this updater with the following command:
    *
    * ```sh
-   * $ gen <%= alias %>
+   * $ gen <%= camelcase(alias) %>
    * ```
    * @name default
    * @api public
    */
 
-  app.task('default', ['<%= alias %>']);
+  app.task('default', ['<%= camelcase(alias) %>']);
 
   /**
    * Scaffold out an [Update][] updater project. Also aliased as the [default](#default) task.
@@ -38,7 +40,7 @@ module.exports = function(app) {
    * @api public
    */
 
-  app.task('<%= alias %>', ['files']);
+  app.task('<%= camelcase(alias) %>', ['files']);
 
   /**
    * Write a `updater.js` file to the current working directory.
