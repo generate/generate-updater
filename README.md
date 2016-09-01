@@ -5,7 +5,7 @@
 </a>
 </p>
 
-Generate a generate generator project, complete with unit tests.
+Generate an [Update](https://github.com/update/update) updater project.
 
 # generate-updater
 
