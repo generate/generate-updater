@@ -14,6 +14,19 @@ module.exports = function(app) {
   app.use(require('generate-git'));
 
   /**
+   * Attempt to pre-populate answers
+   */
+
+  app.on('ask', function(val, key, question, answers) {
+    if (typeof val !== 'undefined') return;
+    if (/^author\./.test(key)) {
+      answers[key] = app.common.get(key);
+    } else {
+      answers[key] = app.data(key) || app.base.data(key);
+    }
+  });
+
+  /**
    * Scaffold out an [update][] updater project. Alias for the [updater](#updater)
    * task, to allow running the updater with the following command:
    *
@@ -24,8 +37,16 @@ module.exports = function(app) {
    * @api public
    */
 
-  app.task('default', ['updater']);
-  app.task('updater', ['prompt-data', 'test', 'dotfiles', 'main', 'rootfiles']);
+  app.task('default', ['check-directory', 'updater']);
+  app.task('updater', [
+    'prompt-data',
+    'docs',
+    'test',
+    'dotfiles',
+    'main',
+    'rootfiles',
+    'prompt-git'
+  ]);
 
   /**
    * Scaffold out a minimal [Update][] updater project.
@@ -79,7 +100,7 @@ module.exports = function(app) {
    * @api public
    */
 
-  task(app, 'main', ['templates/updater.js', 'templates/index.js']);
+  task(app, 'main', ['templates/updatefile.js', 'templates/index.js']);
 
   /**
    * Write the `updater.js` and `index.js` files for a micro-updater.
@@ -88,7 +109,6 @@ module.exports = function(app) {
    * $ gen updater:main-micro
    * ```
    * @name updater:main-micro
-   * @api public
    */
 
   task(app, 'main-micro', ['templates/updater-micro.js', 'templates/index.js']);
@@ -110,8 +130,20 @@ module.exports = function(app) {
   ]);
 
   /**
-   * Write a `test.js` file to the current working directory, with unit tests for
-   * an [update][] updater.
+   * Add a `verbfile.js` and basic docs in the `docs` directory.
+   *
+   * ```sh
+   * $ gen updater:docs
+   * ```
+   * @name updater:docs
+   * @api public
+   */
+
+  task(app, 'docs', ['templates/docs/*.md', 'templates/verbfile.js']);
+
+  /**
+   * Create a `test.js` file in the `test` directory, with unit tests for all of the tasks
+   * in the generated updater.
    *
    * ```sh
    * $ gen updater:test
@@ -152,6 +184,7 @@ module.exports = function(app) {
 
   app.task('prompt-data', ['prompt'], function(cb) {
     app.option('askWhen', 'not-answered');
+    app.data('description', 'My awesome updater.');
     cb();
   });
 };
