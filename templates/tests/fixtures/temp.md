@@ -1,7 +1,7 @@
 ---
 rename:
   dirname: test/fixtures
-  basename: text.txt
+  basename: temp.txt
 ---
 
 Remove me after you create your own fixtures.
